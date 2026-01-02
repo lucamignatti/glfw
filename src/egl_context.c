@@ -344,6 +344,17 @@ GLFWbool _glfwInitEGL(void) {
   if (_glfw.egl.handle)
     return GLFW_TRUE;
 
+  /* Check for MESA_EGL_LIBRARY environment variable first (set by
+   * libgl_interpose on macOS) */
+  const char *mesa_egl = getenv("MESA_EGL_LIBRARY");
+  if (mesa_egl) {
+    _glfw.egl.handle = _glfwPlatformLoadModule(mesa_egl);
+    if (_glfw.egl.handle) {
+      _glfw.egl.prefix = (strncmp(mesa_egl, "lib", 3) == 0);
+      goto egl_loaded;
+    }
+  }
+
   for (i = 0; sonames[i]; i++) {
     _glfw.egl.handle = _glfwPlatformLoadModule(sonames[i]);
     if (_glfw.egl.handle)
@@ -356,6 +367,8 @@ GLFWbool _glfwInitEGL(void) {
   }
 
   _glfw.egl.prefix = (strncmp(sonames[i], "lib", 3) == 0);
+
+egl_loaded:
 
   _glfw.egl.GetConfigAttrib =
       (PFN_eglGetConfigAttrib)_glfwPlatformGetModuleSymbol(
