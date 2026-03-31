@@ -553,6 +553,8 @@ struct _GLFWwindow
     GLFWbool            stickyMouseButtons;
     GLFWbool            lockKeyMods;
     GLFWbool            disableMouseButtonLimit;
+    GLFWbool            ime;
+    GLFWbool            managePreeditCandidate;
     int                 cursorMode;
     char                mouseButtons[GLFW_MOUSE_BUTTON_LAST + 1];
     char                keys[GLFW_KEY_LAST + 1];
@@ -579,6 +581,9 @@ struct _GLFWwindow
         GLFWkeyfun                key;
         GLFWcharfun               character;
         GLFWcharmodsfun           charmods;
+        GLFWpreeditfun            preedit;
+        GLFWimestatusfun          imeStatus;
+        GLFWpreeditcandidatefun   preeditCandidate;
         GLFWdropfun               drop;
     } callbacks;
 
@@ -1018,4 +1023,3 @@ int _glfw_max(int a, int b);
 void* _glfw_calloc(size_t count, size_t size);
 void* _glfw_realloc(void* pointer, size_t size);
 void _glfw_free(void* pointer);
-

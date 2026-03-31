@@ -372,6 +372,8 @@ GLFWAPI void glfwWindowHint(int hint, int value)
         case GLFW_POSITION_Y:
             _glfw.hints.window.ypos = value;
             return;
+        case GLFW_SOFT_FULLSCREEN:
+            return;
         case GLFW_WIN32_KEYBOARD_MENU:
             _glfw.hints.window.win32.keymenu = value ? GLFW_TRUE : GLFW_FALSE;
             return;
@@ -1196,4 +1198,3 @@ GLFWAPI void glfwPostEmptyEvent(void)
     _GLFW_REQUIRE_INIT();
     _glfw.platform.postEmptyEvent();
 }
-

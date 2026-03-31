@@ -940,6 +940,11 @@ extern "C" {
  *  Initial position y-coordinate [window hint](@ref GLFW_POSITION_Y).
  */
 #define GLFW_POSITION_Y             0x0002000F
+/*! @brief Soft full screen window hint.
+ *
+ *  Soft full screen [window hint](@ref GLFW_SOFT_FULLSCREEN).
+ */
+#define GLFW_SOFT_FULLSCREEN        0x00020010
 
 /*! @brief Framebuffer bit depth hint.
  *
@@ -1155,6 +1160,9 @@ extern "C" {
 #define GLFW_LOCK_KEY_MODS           0x00033004
 #define GLFW_RAW_MOUSE_MOTION        0x00033005
 #define GLFW_UNLIMITED_MOUSE_BUTTONS 0x00033006
+#define GLFW_IME                     0x00033007
+
+#define GLFW_MANAGE_PREEDIT_CANDIDATE 0x00050004
 
 #define GLFW_CURSOR_NORMAL          0x00034001
 #define GLFW_CURSOR_HIDDEN          0x00034002
@@ -1944,6 +1952,40 @@ typedef void (* GLFWcharfun)(GLFWwindow* window, unsigned int codepoint);
  *  @ingroup input
  */
 typedef void (* GLFWcharmodsfun)(GLFWwindow* window, unsigned int codepoint, int mods);
+
+/*! @brief The function pointer type for preedit callbacks.
+ *
+ *  This is the function pointer type for preedit callbacks.
+ *
+ *  @ingroup input
+ */
+typedef void (* GLFWpreeditfun)(GLFWwindow* window,
+                                int preedit_count,
+                                unsigned int* preedit_string,
+                                int block_count,
+                                int* block_sizes,
+                                int focused_block,
+                                int caret);
+
+/*! @brief The function pointer type for IME status callbacks.
+ *
+ *  This is the function pointer type for IME status callbacks.
+ *
+ *  @ingroup input
+ */
+typedef void (* GLFWimestatusfun)(GLFWwindow* window);
+
+/*! @brief The function pointer type for preedit candidate callbacks.
+ *
+ *  This is the function pointer type for preedit candidate callbacks.
+ *
+ *  @ingroup input
+ */
+typedef void (* GLFWpreeditcandidatefun)(GLFWwindow* window,
+                                         int candidates_count,
+                                         int selected_index,
+                                         int page_start,
+                                         int page_size);
 
 /*! @brief The function pointer type for path drop callbacks.
  *
@@ -5296,6 +5338,48 @@ GLFWAPI GLFWcharfun glfwSetCharCallback(GLFWwindow* window, GLFWcharfun callback
  */
 GLFWAPI GLFWcharmodsfun glfwSetCharModsCallback(GLFWwindow* window, GLFWcharmodsfun callback);
 
+/*! @brief Sets the preedit callback.
+ *
+ *  @ingroup input
+ */
+GLFWAPI GLFWpreeditfun glfwSetPreeditCallback(GLFWwindow* window, GLFWpreeditfun callback);
+
+/*! @brief Sets the IME status callback.
+ *
+ *  @ingroup input
+ */
+GLFWAPI GLFWimestatusfun glfwSetIMEStatusCallback(GLFWwindow* window, GLFWimestatusfun callback);
+
+/*! @brief Sets the preedit candidate callback.
+ *
+ *  @ingroup input
+ */
+GLFWAPI GLFWpreeditcandidatefun glfwSetPreeditCandidateCallback(GLFWwindow* window, GLFWpreeditcandidatefun callback);
+
+/*! @brief Retrieves the preedit cursor rectangle.
+ *
+ *  @ingroup input
+ */
+GLFWAPI void glfwGetPreeditCursorRectangle(GLFWwindow* window, int* x, int* y, int* w, int* h);
+
+/*! @brief Sets the preedit cursor rectangle.
+ *
+ *  @ingroup input
+ */
+GLFWAPI void glfwSetPreeditCursorRectangle(GLFWwindow* window, int x, int y, int w, int h);
+
+/*! @brief Resets the current preedit text.
+ *
+ *  @ingroup input
+ */
+GLFWAPI void glfwResetPreeditText(GLFWwindow* window);
+
+/*! @brief Returns a preedit candidate string.
+ *
+ *  @ingroup input
+ */
+GLFWAPI unsigned int* glfwGetPreeditCandidate(GLFWwindow* window, int index, int* textCount);
+
 /*! @brief Sets the mouse button callback.
  *
  *  This function sets the mouse button callback of the specified window, which
@@ -6563,4 +6647,3 @@ GLFWAPI VkResult glfwCreateWindowSurface(VkInstance instance, GLFWwindow* window
 #endif
 
 #endif /* _glfw3_h_ */
-
